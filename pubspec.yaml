@@ -25,7 +25,10 @@ dependencies:
   path_provider: ^2.0.1
   percent_indicator: ^3.0.1
   permission_handler: ^6.1.1
-  podcast_search: ^0.4.0
+  podcast_search:
+    git:
+      url: https://github.com/breez/podcast_search.git
+      ref: 7515c62c7a5001aa9f22849aa5fc8195ff65ba3c
   provider: ^5.0.0
   rxdart: ^0.26.0
   scrollable_positioned_list: ^0.1.10
