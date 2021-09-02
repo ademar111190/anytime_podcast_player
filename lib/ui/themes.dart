@@ -51,6 +51,17 @@ ThemeData _buildLightTheme() {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(primary: Colors.grey[800]),
     ),
+    radioTheme: base.radioTheme.copyWith(
+      fillColor: MaterialStateProperty.resolveWith(
+            (states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.orange;
+          } else {
+            return Color(0x8a000000);
+          }
+        },
+      ),
+    ),
   );
 }
 
@@ -108,6 +119,13 @@ ThemeData _buildDarktheme() {
           color: Color(0xffffffff),
           style: BorderStyle.solid,
         ),
+      ),
+    ),
+    radioTheme: base.radioTheme.copyWith(
+      fillColor: MaterialStateProperty.resolveWith(
+        (states) {
+          return Colors.white;
+        },
       ),
     ),
   );

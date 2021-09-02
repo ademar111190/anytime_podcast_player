@@ -126,7 +126,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "no_subscriptions_message" : "Tap the Discovery button below or use the search bar above to find your first podcast",
+  "no_subscriptions_message": "Tap the Discovery button below or use the search bar above to find your first podcast",
   "no_podcast_details_message": "Could not load podcast episodes. Please check your connection.",
   "@no_podcast_details_message": {
     "description": "Displayed on the podcast details page when the details could not be loaded",
@@ -366,5 +366,13 @@
     "description": "Option label for adding manual RSS feed url",
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "sleep_episode_function_header": "Stop audio in",
+  "sleep_episode_function_turn_off": "Turn off timer",
+  "sleep_episode_function_toggled_on": "Your sleep timer is set",
+  "sleep_episode_function_toggled_off": "Your sleep timer is turned off",
+  "sleep_episode_function_15_minutes": "15 minutes",
+  "sleep_episode_function_30_minutes": "30 minutes",
+  "sleep_episode_function_45_minutes": "45 minutes",
+  "sleep_episode_function_60_minutes": "1 hour",
 }

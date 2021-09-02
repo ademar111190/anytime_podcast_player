@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:anytime/bloc/bloc.dart';
 import 'package:anytime/entities/episode.dart';
 import 'package:anytime/services/audio/audio_player_service.dart';
+import 'package:anytime/state/sleep_policy.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
@@ -45,6 +46,9 @@ class AudioBloc extends Bloc {
   /// Listens for playback speed change requests.
   final PublishSubject<double> _playbackSpeedSubject = PublishSubject<double>();
 
+  /// Move from one sleep policy to another.
+  final Subject<SleepPolicy> _sleepPolicy = BehaviorSubject<SleepPolicy>();
+
   AudioBloc({
     @required this.audioPlayerService,
   }) {
@@ -59,6 +63,9 @@ class AudioBloc extends Bloc {
 
     /// Listen for playback speed changes
     _handlePlaybackSpeedTransitions();
+
+    /// Listen for sleep policy changes
+    _handleSleepPolicyChanges();
   }
 
   /// Listens to events from the UI (or any client) to transition from one
@@ -74,6 +81,7 @@ class AudioBloc extends Bloc {
           await audioPlayerService.play();
           break;
         case TransitionState.pause:
+          changeSleepPolicy(sleepPolicyOff());
           await audioPlayerService.pause();
           break;
         case TransitionState.fastforward:
@@ -83,6 +91,7 @@ class AudioBloc extends Bloc {
           await audioPlayerService.rewind();
           break;
         case TransitionState.stop:
+          changeSleepPolicy(sleepPolicyOff());
           await audioPlayerService.stop();
           break;
       }
@@ -107,6 +116,20 @@ class AudioBloc extends Bloc {
   void _handlePlaybackSpeedTransitions() {
     _playbackSpeedSubject.listen((double speed) async {
       await audioPlayerService.setPlaybackSpeed(speed);
+    });
+  }
+
+  void _handleSleepPolicyChanges() {
+    _sleepPolicy.listen((SleepPolicy policy) async {
+      log.fine('Policy changed o $policy');
+      if (policy is SleepPolicyTimer) {
+        await Future<void>.delayed(policy.duration).then((_) async {
+          final current = await _sleepPolicy.first;
+          if (policy == current) {
+            transitionState(TransitionState.pause);
+          }
+        });
+      }
     });
   }
 
@@ -152,12 +175,19 @@ class AudioBloc extends Bloc {
   /// Change playback speed
   void Function(double) get playbackSpeed => _playbackSpeedSubject.sink.add;
 
+  /// Get the sleep policy stream
+  Stream<SleepPolicy> get sleepPolicy => _sleepPolicy.stream;
+
+  /// Change the sleep policy
+  void Function(SleepPolicy) get changeSleepPolicy => _sleepPolicy.sink.add;
+
   @override
   void dispose() {
     _play.close();
     _transitionPlayingState.close();
     _transitionPosition.close();
     _playbackSpeedSubject.close();
+    _sleepPolicy.close();
     super.dispose();
   }
 }

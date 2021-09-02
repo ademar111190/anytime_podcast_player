@@ -365,5 +365,13 @@
     "description": "Option label for adding manual RSS feed url",
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "sleep_episode_function_header": "Para o áudio em",
+  "sleep_episode_function_turn_off": "Desligar o temporizador",
+  "sleep_episode_function_toggled_on": "O temporizador foi definido",
+  "sleep_episode_function_toggled_off": "O temporizador está desligado",
+  "sleep_episode_function_15_minutes": "15 minutos",
+  "sleep_episode_function_30_minutes": "30 minutos",
+  "sleep_episode_function_45_minutes": "45 minutos",
+  "sleep_episode_function_60_minutes": "1 hora",
 }

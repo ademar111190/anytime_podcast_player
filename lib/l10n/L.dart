@@ -667,6 +667,78 @@ class L {
           locale: localeName,
         );
   }
+
+  String get sleep_episode_function_header {
+    return Intl.message(
+      'Stop audio in',
+      name: 'sleep_episode_function_header',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_turn_off {
+    return Intl.message(
+      'Turn off timer',
+      name: 'sleep_episode_function_turn_off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_toggled_on {
+    return Intl.message(
+      'Your sleep timer is set',
+      name: 'sleep_episode_function_toggled_on',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_toggled_off {
+    return Intl.message(
+      'Your sleep timer is turned off',
+      name: 'sleep_episode_function_toggled_off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_15_minutes {
+    return Intl.message(
+      '15 minutes',
+      name: 'sleep_episode_function_15_minutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_30_minutes {
+    return Intl.message(
+      '30 minutes',
+      name: 'sleep_episode_function_30_minutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_45_minutes {
+    return Intl.message(
+      '45 minutes',
+      name: 'sleep_episode_function_45_minutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get sleep_episode_function_60_minutes {
+    return Intl.message(
+      '1 hour',
+      name: 'sleep_episode_function_60_minutes',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class LocalisationsDelegate extends LocalizationsDelegate<L> {
