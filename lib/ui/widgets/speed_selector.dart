@@ -71,6 +71,18 @@ class _SpeedSelectorWidgetState extends State<SpeedSelectorWidget> {
                           title: Text(
                             L.of(context).playback_speed_label,
                           ),
+                          scrollable: true,
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: Text(
+                                L.of(context).cancel_button_label,
+                                style: TextStyle(color: Theme.of(context).buttonColor),
+                              ),
+                            )
+                          ],
                           content: StatefulBuilder(
                             builder: (BuildContext context, StateSetter setState) {
                               return Column(

@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:anytime/bloc/podcast/audio_bloc.dart';
 import 'package:anytime/l10n/L.dart';
 import 'package:anytime/services/audio/audio_player_service.dart';
+import 'package:anytime/ui/widgets/sleep_selector.dart';
 import 'package:anytime/ui/widgets/speed_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -66,70 +67,77 @@ class _PlayerTransportControlsState extends State<PlayerTransportControls> with 
   @override
   Widget build(BuildContext context) {
     final audioBloc = Provider.of<AudioBloc>(context, listen: false);
-    final theme = Theme.of(context);
-    final effectiveVisualDensity = theme.visualDensity;
 
-    var unadjustedConstraints = const BoxConstraints(
-      minWidth: 24.0,
-      minHeight: 24.0,
-    );
+    return StreamBuilder<AudioState>(
+      stream: audioBloc.playingState,
+      builder: (context, snapshot) {
+        final audioState = snapshot.data;
 
-    final adjustedConstraints = effectiveVisualDensity.effectiveConstraints(unadjustedConstraints);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: StreamBuilder<AudioState>(
-          stream: audioBloc.playingState,
-          builder: (context, snapshot) {
-            final audioState = snapshot.data;
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                ConstrainedBox(
-                  constraints: adjustedConstraints,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    return snapshot.data == AudioState.buffering ? null : _rewind(audioBloc);
-                  },
-                  tooltip: L.of(context).rewind_button_label,
-                  padding: const EdgeInsets.all(0.0),
-                  icon: Icon(
-                    Icons.replay_30,
-                    size: 48.0,
-                    color: Theme.of(context).buttonColor,
-                  ),
-                ),
-                _PlayButton(
-                    audioState: audioState,
-                    onPlay: () => _play(audioBloc),
-                    onPause: () => _pause(audioBloc),
-                    playPauseController: _playPauseController),
-                IconButton(
-                  onPressed: () {
-                    return snapshot.data == AudioState.buffering ? null : _fastforward(audioBloc);
-                  },
-                  padding: const EdgeInsets.all(0.0),
-                  icon: Icon(
-                    Icons.forward_30,
-                    size: 48.0,
-                    color: Theme.of(context).buttonColor,
-                  ),
-                ),
-                SpeedSelectorWidget(
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            SizedBox(width: 16.0, height: 0.0),
+            Expanded(flex: 1, child: Container()),
+            SizedBox(
+              width: 48.0,
+              child: Center(
+                child: SleepSelector(),
+              ),
+            ),
+            Expanded(flex: 1, child: Container()),
+            IconButton(
+              onPressed: () {
+                return snapshot.data == AudioState.buffering
+                    ? null
+                    : _rewind(audioBloc);
+              },
+              tooltip: L.of(context).rewind_button_label,
+              padding: const EdgeInsets.all(0.0),
+              icon: Icon(
+                Icons.replay_30,
+                size: 48.0,
+                color: Theme.of(context).buttonColor,
+              ),
+            ),
+            Expanded(flex: 1, child: Container()),
+            _PlayButton(
+              audioState: audioState,
+              onPlay: () => _play(audioBloc),
+              onPause: () => _pause(audioBloc),
+              playPauseController: _playPauseController,
+            ),
+            Expanded(flex: 1, child: Container()),
+            IconButton(
+              onPressed: () {
+                return snapshot.data == AudioState.buffering
+                    ? null
+                    : _fastforward(audioBloc);
+              },
+              padding: const EdgeInsets.all(0.0),
+              icon: Icon(
+                Icons.forward_30,
+                size: 48.0,
+                color: Theme.of(context).buttonColor,
+              ),
+            ),
+            Expanded(flex: 1, child: Container()),
+            SizedBox(
+              width: 48.0,
+              child: Center(
+                child: SpeedSelectorWidget(
                   onChanged: (double value) {
                     audioBloc.playbackSpeed(value);
                   },
                 ),
-              ],
-            );
-          }),
+              ),
+            ),
+            Expanded(flex: 1, child: Container()),
+            SizedBox(width: 16.0, height: 0.0),
+          ],
+        );
+      },
     );
   }
 
