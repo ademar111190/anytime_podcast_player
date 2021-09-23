@@ -6,13 +6,15 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class SleepSelector extends StatelessWidget {
-  final Widget icon;
+  final Widget iconOn;
+  final Widget iconOff;
   final BoxConstraints constraints;
   final EdgeInsetsGeometry padding;
 
   const SleepSelector({
     Key key,
-    this.icon,
+    this.iconOn,
+    this.iconOff,
     this.constraints,
     this.padding = const EdgeInsets.all(8.0),
   }) : super(key: key);
@@ -26,19 +28,12 @@ class SleepSelector extends StatelessWidget {
     return StreamBuilder<SleepPolicy>(
       stream: audioBloc.sleepPolicy,
       builder: (context, snapshot) {
-        final sleepPolicy = snapshot.data ?? sleepPolicyOff();
+        final sleepPolicy = snapshot.data ?? sleepPolicyNotSet();
         return IconButton(
           tooltip: texts.sleep_episode_function_header,
           constraints: constraints,
           padding: padding,
-          icon: icon ??
-              Icon(
-                sleepPolicy is SleepPolicyOff
-                    ? Icons.nightlight_outlined
-                    : Icons.nightlight_round,
-                size: 24.0,
-                color: theme.buttonColor,
-              ),
+          icon: _icon(theme, sleepPolicy),
           onPressed: () {
             presentSleepPolicyOptions(
               context,
@@ -67,7 +62,7 @@ class SleepSelector extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            texts.playback_speed_label,
+            texts.sleep_episode_function_header,
           ),
           scrollable: true,
           actions: [
@@ -107,24 +102,13 @@ class SleepSelector extends StatelessWidget {
     SleepPolicy newPolicy,
   ) {
     audioBloc.changeSleepPolicy(newPolicy);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    if (scaffoldMessenger != null) {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            newPolicy is SleepPolicyOff
-                ? texts.sleep_episode_function_toggled_off
-                : texts.sleep_episode_function_toggled_on,
-          ),
-        ),
-      );
-    }
     Navigator.pop(context);
   }
 
   List<SleepOption> sleepOptions(L texts, SleepPolicy sleepPolicy) {
     var options = <SleepOption>[];
-    if (!(sleepPolicy is SleepPolicyOff)) {
+    if (!(sleepPolicy is SleepPolicyOff) &&
+        !(sleepPolicy is SleepPolicyNotSet)) {
       options.add(SleepOption(
         texts.sleep_episode_function_turn_off,
         sleepPolicyOff(),
@@ -132,6 +116,10 @@ class SleepSelector extends StatelessWidget {
     }
     options.addAll(
       [
+        SleepOption(
+          texts.sleep_episode_function_5_minutes,
+          sleepPolicyMinutes(5),
+        ),
         SleepOption(
           texts.sleep_episode_function_15_minutes,
           sleepPolicyMinutes(15),
@@ -191,6 +179,24 @@ class SleepSelector extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _icon(ThemeData theme, SleepPolicy sleepPolicy) {
+    if (sleepPolicy is SleepPolicyOff || sleepPolicy is SleepPolicyNotSet) {
+      return iconOff ??
+          Icon(
+            Icons.nightlight_outlined,
+            size: 24.0,
+            color: theme.buttonColor,
+          );
+    } else {
+      return iconOn ??
+          Icon(
+            Icons.nightlight_round,
+            size: 24.0,
+            color: theme.buttonColor,
+          );
+    }
   }
 }
 

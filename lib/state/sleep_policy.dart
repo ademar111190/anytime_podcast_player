@@ -1,5 +1,12 @@
 abstract class SleepPolicy {}
 
+class SleepPolicyNotSet extends SleepPolicy {
+  @override
+  bool operator ==(Object other) {
+    return other is SleepPolicyNotSet;
+  }
+}
+
 class SleepPolicyOff extends SleepPolicy {
   @override
   bool operator ==(Object other) {
@@ -24,6 +31,8 @@ class SleepPolicyTimer extends SleepPolicy {
     return 'SleepPolicyTimer($duration)';
   }
 }
+
+SleepPolicy sleepPolicyNotSet() => SleepPolicyNotSet();
 
 SleepPolicy sleepPolicyOff() => SleepPolicyOff();
 

@@ -75,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings_mark_deleted_played_label" : MessageLookupByLibrary.simpleMessage("Marcar os episódios deletados como já reproduzidos"),
     "settings_theme_switch_label" : MessageLookupByLibrary.simpleMessage("Tema escuro"),
     "show_notes_label" : MessageLookupByLibrary.simpleMessage("Mostrar notas"),
+    "sleep_episode_function_5_minutes" : MessageLookupByLibrary.simpleMessage("5 minutos"),
     "sleep_episode_function_15_minutes" : MessageLookupByLibrary.simpleMessage("15 minutos"),
     "sleep_episode_function_30_minutes" : MessageLookupByLibrary.simpleMessage("30 minutos"),
     "sleep_episode_function_45_minutes" : MessageLookupByLibrary.simpleMessage("45 minutos"),

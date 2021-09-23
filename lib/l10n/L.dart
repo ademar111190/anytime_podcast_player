@@ -704,6 +704,15 @@ class L {
     );
   }
 
+  String get sleep_episode_function_5_minutes {
+    return Intl.message(
+      '5 minutes',
+      name: 'sleep_episode_function_5_minutes',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get sleep_episode_function_15_minutes {
     return Intl.message(
       '15 minutes',
