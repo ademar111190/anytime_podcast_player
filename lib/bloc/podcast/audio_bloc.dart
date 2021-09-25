@@ -81,7 +81,7 @@ class AudioBloc extends Bloc {
           await audioPlayerService.play();
           break;
         case TransitionState.pause:
-          changeSleepPolicy(sleepPolicyOff());
+          _turnSleepPolicyOff();
           await audioPlayerService.pause();
           break;
         case TransitionState.fastforward:
@@ -91,7 +91,7 @@ class AudioBloc extends Bloc {
           await audioPlayerService.rewind();
           break;
         case TransitionState.stop:
-          changeSleepPolicy(sleepPolicyOff());
+          _turnSleepPolicyOff();
           await audioPlayerService.stop();
           break;
       }
@@ -102,6 +102,7 @@ class AudioBloc extends Bloc {
   /// underlying audio service.
   void _handleEpisodeRequests() async {
     _play.listen((episode) {
+      changeSleepPolicy(sleepPolicyNotSet());
       audioPlayerService.playEpisode(episode: episode, resume: true);
     });
   }
@@ -131,6 +132,13 @@ class AudioBloc extends Bloc {
         });
       }
     });
+  }
+
+  void _turnSleepPolicyOff() async {
+    final current = await _sleepPolicy.first;
+    if (current is SleepPolicyNotSet) return;
+    if (current is SleepPolicyOff) return;
+    changeSleepPolicy(sleepPolicyOff());
   }
 
   @override

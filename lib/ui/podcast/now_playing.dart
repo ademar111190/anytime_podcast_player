@@ -9,6 +9,7 @@ import 'package:anytime/entities/chapter.dart';
 import 'package:anytime/entities/episode.dart';
 import 'package:anytime/l10n/L.dart';
 import 'package:anytime/services/audio/audio_player_service.dart';
+import 'package:anytime/state/sleep_policy.dart';
 import 'package:anytime/ui/podcast/chapter_selector.dart';
 import 'package:anytime/ui/podcast/dot_decoration.dart';
 import 'package:anytime/ui/podcast/playback_error_listener.dart';
@@ -54,6 +55,10 @@ class _NowPlayingState extends State<NowPlaying> with WidgetsBindingObserver {
         popped = true;
       }
     });
+
+    audioBloc.sleepPolicy
+        .where((policy) => !(policy is SleepPolicyNotSet))
+        .listen((policy) => _policyChanged(policy));
   }
 
   @override
@@ -127,6 +132,22 @@ class _NowPlayingState extends State<NowPlaying> with WidgetsBindingObserver {
                       ),
               ));
         });
+  }
+
+  void _policyChanged(SleepPolicy policy) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final texts = L.of(context);
+    if (scaffoldMessenger != null) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            policy is SleepPolicyOff
+                ? texts.sleep_episode_function_toggled_off
+                : texts.sleep_episode_function_toggled_on,
+          ),
+        ),
+      );
+    }
   }
 }
 
