@@ -122,7 +122,7 @@ class AudioBloc extends Bloc {
 
   void _handleSleepPolicyChanges() {
     _sleepPolicy.listen((SleepPolicy policy) async {
-      log.fine('Policy changed o $policy');
+      log.fine('Policy changed to $policy');
       if (policy is SleepPolicyTimer) {
         await Future<void>.delayed(policy.duration).then((_) async {
           final current = await _sleepPolicy.first;
