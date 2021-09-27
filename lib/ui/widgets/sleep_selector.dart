@@ -28,7 +28,7 @@ class SleepSelector extends StatelessWidget {
     return StreamBuilder<SleepPolicy>(
       stream: audioBloc.sleepPolicy,
       builder: (context, snapshot) {
-        final sleepPolicy = snapshot.data ?? sleepPolicyNotSet();
+        final sleepPolicy = snapshot.data ?? sleepPolicyOff(true);
         return IconButton(
           tooltip: texts.sleep_episode_function_header,
           constraints: constraints,
@@ -107,8 +107,7 @@ class SleepSelector extends StatelessWidget {
 
   List<SleepOption> sleepOptions(L texts, SleepPolicy sleepPolicy) {
     var options = <SleepOption>[];
-    if (!(sleepPolicy is SleepPolicyOff) &&
-        !(sleepPolicy is SleepPolicyNotSet)) {
+    if (!(sleepPolicy is SleepPolicyOff)) {
       options.add(SleepOption(
         texts.sleep_episode_function_turn_off,
         sleepPolicyOff(),
@@ -182,7 +181,7 @@ class SleepSelector extends StatelessWidget {
   }
 
   Widget _icon(ThemeData theme, SleepPolicy sleepPolicy) {
-    if (sleepPolicy is SleepPolicyOff || sleepPolicy is SleepPolicyNotSet) {
+    if (sleepPolicy is SleepPolicyOff) {
       return iconOff ??
           Icon(
             Icons.nightlight_outlined,

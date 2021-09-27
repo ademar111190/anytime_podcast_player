@@ -102,7 +102,7 @@ class AudioBloc extends Bloc {
   /// underlying audio service.
   void _handleEpisodeRequests() async {
     _play.listen((episode) {
-      changeSleepPolicy(sleepPolicyNotSet());
+      _turnSleepPolicyOff();
       audioPlayerService.playEpisode(episode: episode, resume: true);
     });
   }
@@ -136,7 +136,6 @@ class AudioBloc extends Bloc {
 
   void _turnSleepPolicyOff() async {
     final current = await _sleepPolicy.first;
-    if (current is SleepPolicyNotSet) return;
     if (current is SleepPolicyOff) return;
     changeSleepPolicy(sleepPolicyOff());
   }
