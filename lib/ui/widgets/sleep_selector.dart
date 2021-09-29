@@ -56,6 +56,7 @@ class SleepSelector extends StatelessWidget {
     SleepPolicy sleepPolicy,
   ) {
     final options = sleepOptions(texts, sleepPolicy);
+    final groupValue = _groupValue(sleepPolicy, options);
     showDialog<void>(
       context: context,
       useRootNavigator: false,
@@ -85,7 +86,7 @@ class SleepSelector extends StatelessWidget {
                 theme,
                 texts,
                 audioBloc,
-                sleepPolicy,
+                groupValue,
                 options[index],
               ),
             ),
@@ -196,6 +197,20 @@ class SleepSelector extends StatelessWidget {
             color: theme.buttonColor,
           );
     }
+  }
+
+  SleepPolicy _groupValue(SleepPolicy sleepPolicy, List<SleepOption> options) {
+    if (sleepPolicy is SleepPolicyTimer) {
+      for (var option in options) {
+        final policy = option.policy;
+        if (policy is SleepPolicyTimer) {
+          if (policy.duration == sleepPolicy.duration) {
+            return policy;
+          }
+        }
+      }
+    }
+    return sleepPolicy;
   }
 }
 
